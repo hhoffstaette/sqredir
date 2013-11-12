@@ -1,0 +1,48 @@
+#
+# URL file for sqredir
+# ====================
+#
+# all lines in this file ...
+#   * are blank and therefore ignored
+#   * start with a "#" and therefore are comments
+#   * start with a "~" and are followed immediately by a url_pattern for
+#     requests which should always be allowed.
+#   * contain a url_pattern and a redirect_url, separated by a white
+#     space, for requests which should be redirected to redirect_url
+#
+#   # comment
+#   ~url_pattern
+#   url_pattern redirect_url
+#
+# url_pattern describes a to-be-matched pattern in the request 
+# to be allowed or redirected to redirect_url.
+# url_pattern can be the whole url or a substring of it and you can
+# use regular expressions to describe the url, but you don't have to.
+#
+# examples (all commented out by default):
+#
+#/admanager/ http://192.168.35.62/adbanner.png
+#^http://www.cnn.com/event.ng.* http://192.168.35.62/empty.html
+#^http://www.badsite.com/bad/bad.html http://192.168.35.52/empty.html
+#
+# this:
+#http://hatesite.com/ http://192.168.35.62/adbanner.png
+#
+# could also be written as:
+#^http://hatesite.com/.* http://192.168.35.62/adbanner.png
+#
+# which is probably slightly faster and cleaner, but is not 
+# necessary for correct operations
+#
+# some more examples:
+#^http://ad.*doubleclick.net.* http://192.168.35.52/adbanner.png
+#^http://www.cnn.com/event.ng.* http://192.168.35.52/empty.html
+#~/admanager/good/
+#~^http://www.someportal.com
+#^http://classic.adlink.de.* http://192.168.35.52/adbanner.png
+#/adclick/ http://192.168.35.52/adbanner.png
+#/admanager/ http://192.168.35.52/adbanner.png
+#/gifs/ads/ http://192.168.35.52/adbanner.png
+#/image.ng http://192.168.35.52/adbanner.png
+#/image/ads/ http://192.168.35.52/adbanner.png
+#/images/ads/ http://192.168.35.52/adbanner.png
