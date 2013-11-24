@@ -236,7 +236,7 @@ int main(int argc, char **argv)
 	read_config(config_file);
 
 	// make standard output fully buffered
-	char iobuf[IOBUFSIZE];
+	char iobuf[IOBUFSIZE] = {0};
 	if (setvbuf(stdout, iobuf, _IOFBF, IOBUFSIZE) != 0) {
 		fprintf(stderr, "Unable to configure stdout buffer: %s\n", strerror(errno));
 		exit(EXIT_FAILURE);
