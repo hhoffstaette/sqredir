@@ -3,10 +3,60 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <regex.h>
+
+// Modules
 #include "blocklist.h"
 
+// list element for keeping a whitelist URL pattern
+struct allow_node {
+	regex_t url;
+	int line;
+	struct allow_node* next;
+};
+
+// list element for keeping a block pattern and redirect URL */
+struct block_node {
+	regex_t url;
+	char redir[256];
+	int line;
+	struct block_node* next;
+};
+
+// lists of regexps to block/allow
+static struct allow_node* allowlist;
+static struct block_node* blocklist;
+
+bool allow_match(char* url) {
+	struct allow_node* allow = allowlist;
+	while (allow != NULL) {
+		if (regexec(&allow->url, url, (size_t) 0, NULL, 0) == 0) {
+			// matched allow rule
+			return true;
+		}
+		allow = allow->next;
+	}
+
+	// no match
+	return false;
+}
+
+char* block_match(char* url) {
+	struct block_node* block = blocklist;
+	while (block != NULL) {
+		if (!regexec(&block->url, url, (size_t) 0, NULL, 0)) {
+			// matched block URL: return replacement
+			return block->redir;
+		}
+		block = block->next;
+	}
+
+	// no match
+	return NULL;
+}
+
 // append url pattern and redirect url to block list 
-int add_block_url(char* pattern, char* redirect, int num)
+static int add_block_url(char* pattern, char* redirect, int num)
 {
 	// TODO: the code path for creating the first and successor list nodes
 	// is unnecessarily duplicated and should be merged.
@@ -47,7 +97,7 @@ int add_block_url(char* pattern, char* redirect, int num)
 }
 
 // append url pattern to allow list
-int add_allow_url(char* pattern, int num)
+static int add_allow_url(char* pattern, int num)
 {
 	// TODO: the code path for creating the first and any successor list nodes
 	// is unnecessarily duplicated and should be merged.
