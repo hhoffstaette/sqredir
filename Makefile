@@ -8,8 +8,8 @@ COPY = cp -i
 STRIP = strip
 MKDIR = mkdir -p
 
-sqredir: sqredir.c
-	$(CC) $(CFLAGS) -o sqredir sqredir.c
+sqredir: blocklist.h blocklist.c sqredir.c
+	$(CC) $(CFLAGS) -o sqredir blocklist.c sqredir.c
 	$(STRIP) sqredir
 
 install: sqredir urls.txt
