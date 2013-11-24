@@ -6,6 +6,9 @@
 #include "match.h"
 #include "blocklist.h"
 
+// always a crowd pleaser
+static char* EMPTY = "";
+
 // tests the HTTP request and returns the redirect information if necessary
 // input: the original request as passed by Squid        
 // output: output buffer for any redirect URL 
@@ -22,13 +25,13 @@ char* match_request(const char* input, char* output)
 	int matched = sscanf(input, "%1023s %255s %255s %31s", url, src_address, ident, method);
 	if (matched < 4) {
 		// mangled/invalid input: ignore
-		return ("");
+		return EMPTY;
 	}
 
 	/// check allow rules first, return empty string if matched
 	if (allow_match(url)) {
 		// matched allow rule: return
-		return("");
+		return EMPTY;
 	}
 
 	// check block rules, return redirect line or empty string
@@ -40,5 +43,5 @@ char* match_request(const char* input, char* output)
 	}
 
 	// No match: pass through
-	return("");
+	return EMPTY;
 }

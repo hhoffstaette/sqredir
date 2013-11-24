@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <errno.h>
 
-// Other modules
+// Modules
 #include "blocklist.h"
 #include "match.h"
 
