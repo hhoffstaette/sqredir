@@ -28,16 +28,6 @@ struct allow_node* allowlist;
 // I/O buffer size, must be > length of url+src_address+ident+method
 #define IOBUFSIZE 4096
 
-// input/output buffers
-char inputline[IOBUFSIZE];
-char outputline[IOBUFSIZE];
-
-// request line elements
-char url[1024];
-char src_address[256];
-char ident[256];
-char method[32];
-
 // append url pattern and redirect url to block list 
 int add_block_url(char* pattern, char* redirect, int num)
 {
@@ -176,10 +166,16 @@ void read_config(char *filename)
 // tests the http request and returns the redirect information if necessary
 // line: the original http request as passed by squid
 // returns: empty string if unmatched, else redirect URL
-char* matchurl()
+char* matchurl(const char* input, char* output)
 {
+	// request line elements
+	char url[1024];
+	char src_address[256];
+	char ident[256];
+	char method[32];
+
 	// scan request, ignore if invalid
-	int matched = sscanf(inputline, "%1023s %255s %255s %31s", url, src_address, ident, method);
+	int matched = sscanf(input, "%1023s %255s %255s %31s", url, src_address, ident, method);
 	if (matched < 4) {
 		// mangled/invalid input: ignore
 		return ("");
@@ -200,8 +196,8 @@ char* matchurl()
 	while (block != NULL) {
 		if (!regexec(&block->url, url, (size_t) 0, NULL, 0)) {
 			// matched block URL: return replacement
-			sprintf(outputline, "%s %s %s %s", block->redir, src_address, ident, method);
-			return outputline;
+			sprintf(output, "%s %s %s %s", block->redir, src_address, ident, method);
+			return output;
 		}
 		block = block->next;
 	}
@@ -214,8 +210,8 @@ char* matchurl()
 int main(int argc, char **argv)
 {
 	// config file
-	char default_config[] = "/etc/sqredir.conf";
-	char config_file[1024] = {0};
+	static const char default_config_file[] = "/etc/sqredir.conf";
+	static char config_file[1024] = {0};
 
 	// handle command line
 	if (argc > 2) {
@@ -229,7 +225,7 @@ int main(int argc, char **argv)
 			strncpy(config_file, argv[1], 1023);
 		}
 	} else {
-		strncpy(config_file, default_config, 1023);
+		strncpy(config_file, default_config_file, 1023);
 	}
 
 	// read config file
@@ -242,9 +238,13 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 
+	// input/output buffers
+	char input[IOBUFSIZE];
+	char output[IOBUFSIZE];
+
 	// loop until EOF from stdin
-	while(fgets(inputline, IOBUFSIZE, stdin) != NULL) {
-		fprintf(stdout, "%s\n", matchurl());
+	while(fgets(input, IOBUFSIZE, stdin) != NULL) {
+		fprintf(stdout, "%s\n", matchurl(input, output));
 		fflush(stdout);
 	}
 
