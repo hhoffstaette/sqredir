@@ -1,11 +1,10 @@
 
+#include <errno.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <regex.h>
 #include <string.h>
 #include <unistd.h>
-#include <errno.h>
 
 // Modules
 #include "blocklist.h"
@@ -39,14 +38,13 @@ int main(int argc, char **argv)
 	}
 
 	// read config file
-	int rc = read_config(config_file);
-	if (rc != EXIT_SUCCESS) {
-		exit(rc);
+	if (!read_config(config_file)) {
+		exit(EXIT_FAILURE);
 	}
 
 	// make standard output fully buffered
-	char iobuf[IOBUFSIZE] = {0};
-	if (setvbuf(stdout, iobuf, _IOFBF, IOBUFSIZE) != 0) {
+	char stdoutbuf[IOBUFSIZE] = {0};
+	if (setvbuf(stdout, stdoutbuf, _IOFBF, IOBUFSIZE) != 0) {
 		fprintf(stderr, "Unable to configure stdout buffer: %s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
