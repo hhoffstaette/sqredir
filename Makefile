@@ -15,7 +15,7 @@ install: sqredir
 	$(MKDIR) $(INSTDIR)
 	# DO overwrite the binary
 	$(COPY) -f sqredir $(INSTDIR)
-	# DO NOT overwrite an existign configuration
+	# DO NOT overwrite an existing configuration
 	$(COPY) -n sqredir.conf.dist $(CONFPATH)
 
 clean: 
