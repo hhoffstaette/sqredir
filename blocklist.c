@@ -27,6 +27,7 @@ struct block_node {
 static struct allow_node* allowlist;
 static struct block_node* blocklist;
 
+// match URL against allowlist
 bool allow_match(const char* url) {
 	struct allow_node* allow = allowlist;
 	while (allow != NULL) {
@@ -41,6 +42,7 @@ bool allow_match(const char* url) {
 	return false;
 }
 
+// match URL against blocklist
 const char* block_match(const char* url) {
 	struct block_node* block = blocklist;
 	while (block != NULL) {
