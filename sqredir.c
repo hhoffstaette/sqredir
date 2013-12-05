@@ -55,7 +55,8 @@ int main(int argc, char **argv)
 
 	// loop until EOF from stdin
 	while(fgets(input, IOBUFSIZE, stdin) != NULL) {
-		fprintf(stdout, "%s\n", match_request(input, output));
+		bool matched = match_request(input, output);
+		fprintf(stdout, "%s\n", matched ? output : "");
 		fflush(stdout);
 	}
 

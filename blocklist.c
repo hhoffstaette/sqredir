@@ -27,7 +27,7 @@ struct block_node {
 static struct allow_node* allowlist;
 static struct block_node* blocklist;
 
-bool allow_match(char* url) {
+bool allow_match(const char* url) {
 	struct allow_node* allow = allowlist;
 	while (allow != NULL) {
 		if (regexec(&allow->url, url, (size_t) 0, NULL, 0) == 0) {
@@ -41,7 +41,7 @@ bool allow_match(char* url) {
 	return false;
 }
 
-char* block_match(char* url) {
+const char* block_match(const char* url) {
 	struct block_node* block = blocklist;
 	while (block != NULL) {
 		if (!regexec(&block->url, url, (size_t) 0, NULL, 0)) {
@@ -56,7 +56,7 @@ char* block_match(char* url) {
 }
 
 // append URL pattern to allow list
-static bool add_allow_url(char* pattern, int num)
+static bool add_allow_url(const char* pattern, int num)
 {
 	// TODO: the code path for creating the first and any successor list nodes
 	// is unnecessarily duplicated and should be merged.
@@ -95,7 +95,7 @@ static bool add_allow_url(char* pattern, int num)
 }
 
 // append URL pattern and redirect URL to block list 
-static bool add_block_url(char* pattern, char* redirect, int num)
+static bool add_block_url(const char* pattern, const char* redirect, int num)
 {
 	// TODO: the code path for creating the first and successor list nodes
 	// is unnecessarily duplicated and should be merged.
@@ -138,7 +138,7 @@ static bool add_block_url(char* pattern, char* redirect, int num)
 // reads content of config file; recognizes lines starting with '#' as comments
 // filename: name of config file including path
 // returns: true/false for success/failure
-bool read_config(char *filename)
+bool read_config(const char* filename)
 {
 	char comment = '#';
 	char pass = '~';
