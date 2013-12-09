@@ -22,9 +22,6 @@ int main(int argc, char **argv)
 	// path of config file
 	char config_file[1024] = {0};
 
-	// for now disable concurrency
-	set_match_concurrency_enabled(false);
-
 	// handle command line
 	if (argc > 2) {
 		fprintf(stderr, "Wrong number of arguments! %s -h for help\n", argv[0]);
@@ -39,6 +36,9 @@ int main(int argc, char **argv)
 	} else {
 		strncpy(config_file, default_config_file, 1023);
 	}
+
+	// request concurrency is currently always disabled
+	bool concurrent = false;
 
 	// read config file
 	if (!read_config(config_file)) {
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 
 	// loop until EOF from stdin
 	while(fgets(input, IOBUFSIZE, stdin) != NULL) {
-		bool matched = match_request(input, output);
+		bool matched = match_request(input, output, concurrent);
 		fprintf(stdout, "%s\n", matched ? output : "");
 		fflush(stdout);
 	}
