@@ -22,6 +22,9 @@ int main(int argc, char **argv)
 	// path of config file
 	char config_file[1024] = {0};
 
+	// for now disable concurrency
+	set_match_concurrency_enabled(false);
+
 	// handle command line
 	if (argc > 2) {
 		fprintf(stderr, "Wrong number of arguments! %s -h for help\n", argv[0]);
