@@ -16,7 +16,7 @@ More documentation will come in time, but here's a quick HOWTO:
 - cmake CMakeLists.txt
 - make
 
-The cmake ocnfiguration step is aware of all the usual cmake flags
+The cmake configuration step is aware of all the usual cmake flags
 and will also be nice to any CC (hello clang!) or custom CFLAGS
 you want to specify.
 
