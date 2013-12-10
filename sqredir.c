@@ -1,5 +1,6 @@
 
 #include <errno.h>
+#include <getopt.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,40 +11,64 @@
 #include "blocklist.h"
 #include "match.h"
 
+// I/O buffer size, must be > length of n * id+url+src_address+ident+method
+#define IOBUFSIZE 32768
+
 // default config file
 static const char default_config_file[] = "/etc/sqredir.conf";
 
-// I/O buffer size, must be > length of url+src_address+ident+method
-#define IOBUFSIZE 4096
+// Help
+void usage() {
+    fprintf(stderr,
+        "\n"
+        "Usage: sqredir [options]\n"
+        "\n"
+        "Options:\n"
+        "   -c          Enable request/response batching\n"
+        "   -f <file>   Specify path to blocklist configuration\n"
+        "   -h          Print this help and exit.\n"
+        "\n");
+}
 
 // Magic happens here
 int main(int argc, char **argv)
 {
 	// path of config file
-	char config_file[1024] = {0};
+	char config_file[1024]= {0};
+	strncpy(config_file, default_config_file, 1023);
 
-	// handle command line
-	if (argc > 2) {
-		fprintf(stderr, "Wrong number of arguments! %s -h for help\n", argv[0]);
-		exit(EXIT_FAILURE);
-	} else if (argc == 2) {
-		if (strcmp(argv[1], "-h")==0 || strcmp(argv[1], "--help")==0) {
-			fprintf(stderr, "Usage: %s <urlfile>\n", argv[0]);
-			exit(EXIT_FAILURE);
-		} else {
-			strncpy(config_file, argv[1], 1023);
-		}
-	} else {
-		strncpy(config_file, default_config_file, 1023);
-	}
-
-	// request concurrency is currently always disabled
+	// request concurrency is disabled by default
 	bool concurrent = false;
+
+	// parse command line arguments
+    int arg = 0;
+	while ((arg = getopt(argc, argv, "cf:h")) != -1) {
+		switch (arg)
+		{
+            case 'c': {
+                concurrent = true;
+                break;
+            }
+            case 'f': {
+                strncpy(config_file, optarg, 1023);
+                break;
+            }
+            case 'h': {
+                usage();
+                exit(EXIT_SUCCESS);
+                break;
+            }
+            default: {
+                usage();
+                exit(EXIT_FAILURE);
+            }
+		}
+	}
 
 	// read config file
 	if (!read_config(config_file)) {
-		exit(EXIT_FAILURE);
-	}
+	    exit(EXIT_FAILURE);
+    }
 
 	// make standard output fully buffered
 	char stdoutbuf[IOBUFSIZE] = {0};
