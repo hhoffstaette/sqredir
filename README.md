@@ -31,8 +31,8 @@ Add the following lines to your squid.conf:
     url_rewrite_program /usr/bin/sqredir
     url_rewrite_children 8 startup=4 idle=1 concurrency=8
 
-Note that you wantot have the config outside of /etc, you need to configure
-the path by adding the -f option to the sqredir executable:
+Note that you want to have the configuration file outside of /etc, you
+need to configure the path by adding the -f option to the sqredir executable:
 
     url_rewrite_program /usr/bin/sqredir -f /where/ever/sqredir.conf
 
