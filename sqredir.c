@@ -83,8 +83,8 @@ int main(int argc, char **argv)
 
 	// loop until EOF from stdin
 	while(fgets(input, IOBUFSIZE, stdin) != NULL) {
-		bool matched = match_request(input, output, concurrent);
-		fprintf(stdout, "%s\n", matched ? output : "");
+		match_request(input, output, concurrent);
+		fprintf(stdout, "%s", output);
 		fflush(stdout);
 	}
 
