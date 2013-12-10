@@ -34,7 +34,7 @@ void usage() {
 int main(int argc, char **argv)
 {
 	// path of config file
-	char config_file[1024]= {0};
+	char config_file[1024] = {0};
 	strncpy(config_file, default_config_file, 1023);
 
 	// request concurrency is disabled by default
