@@ -24,7 +24,6 @@ void usage() {
         "Usage: sqredir [options]\n"
         "\n"
         "Options:\n"
-        "   -c          Enable request/response batching\n"
         "   -f <file>   Specify path to blocklist configuration\n"
         "   -h          Print this help and exit.\n"
         "\n");
@@ -37,18 +36,11 @@ int main(int argc, char **argv)
 	char config_file[1024] = {0};
 	strncpy(config_file, default_config_file, 1023);
 
-	// request concurrency is disabled by default
-	bool concurrent = false;
-
 	// parse command line arguments
     int arg = 0;
-	while ((arg = getopt(argc, argv, "cf:h")) != -1) {
+	while ((arg = getopt(argc, argv, "f:h")) != -1) {
 		switch (arg)
 		{
-            case 'c': {
-                concurrent = true;
-                break;
-            }
             case 'f': {
                 strncpy(config_file, optarg, 1023);
                 break;
@@ -83,7 +75,7 @@ int main(int argc, char **argv)
 
 	// loop until EOF from stdin
 	while(fgets(input, IOBUFSIZE, stdin) != NULL) {
-		match_request(input, output, concurrent);
+		match_request(input, output);
 		fprintf(stdout, "%s", output);
 		fflush(stdout);
 	}
