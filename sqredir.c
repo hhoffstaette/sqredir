@@ -32,15 +32,15 @@ void usage() {
 // Magic happens here
 int main(int argc, char **argv)
 {
-	// path of config file
-	char config_file[1024] = {0};
-	strncpy(config_file, default_config_file, 1023);
+    // path of config file
+    char config_file[1024] = {0};
+    strncpy(config_file, default_config_file, 1023);
 
-	// parse command line arguments
+    // parse command line arguments
     int arg = 0;
-	while ((arg = getopt(argc, argv, "f:h")) != -1) {
-		switch (arg)
-		{
+    while ((arg = getopt(argc, argv, "f:h")) != -1) {
+        switch (arg)
+        {
             case 'f': {
                 strncpy(config_file, optarg, 1023);
                 break;
@@ -54,33 +54,33 @@ int main(int argc, char **argv)
                 usage();
                 exit(EXIT_FAILURE);
             }
-		}
-	}
-
-	// read config file
-	if (!read_config(config_file)) {
-	    exit(EXIT_FAILURE);
+        }
     }
 
-	// make standard output fully buffered
-	char stdoutbuf[IOBUFSIZE] = {0};
-	if (setvbuf(stdout, stdoutbuf, _IOFBF, IOBUFSIZE) != 0) {
-		fprintf(stderr, "Unable to configure stdout buffer: %s\n", strerror(errno));
-		exit(EXIT_FAILURE);
-	}
+    // read config file
+    if (!read_config(config_file)) {
+        exit(EXIT_FAILURE);
+    }
 
-	// input/output buffers
-	char input[IOBUFSIZE] = {0};
-	char output[IOBUFSIZE] = {0};
+    // make standard output fully buffered
+    char stdoutbuf[IOBUFSIZE] = {0};
+    if (setvbuf(stdout, stdoutbuf, _IOFBF, IOBUFSIZE) != 0) {
+        fprintf(stderr, "Unable to configure stdout buffer: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
 
-	// loop until EOF from stdin
-	while(fgets(input, IOBUFSIZE, stdin) != NULL) {
-		match_request(input, output);
-		fprintf(stdout, "%s", output);
-		fflush(stdout);
-	}
+    // input/output buffers
+    char input[IOBUFSIZE] = {0};
+    char output[IOBUFSIZE] = {0};
 
-	// EOF after 'squid -k reconfigure' or shutdown
-	exit(EXIT_SUCCESS);
+    // loop until EOF from stdin
+    while(fgets(input, IOBUFSIZE, stdin) != NULL) {
+        match_request(input, output);
+        fprintf(stdout, "%s", output);
+        fflush(stdout);
+    }
+
+    // EOF after 'squid -k reconfigure' or shutdown
+    exit(EXIT_SUCCESS);
 }
 
