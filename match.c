@@ -8,8 +8,8 @@
 
 // tests the HTTP request and returns the redirect information if necessary
 // input: the original request as passed by Squid        
-// output: output buffer for any found redirect URL or empty result
-void match_request(const char* input, char* output)
+// output: response output stream
+void match_request(const char* input, FILE* output)
 {
     // request line elements
     char id[8];
@@ -21,26 +21,25 @@ void match_request(const char* input, char* output)
     // scan request, ignore if invalid
     if (sscanf(input, "%7s %1023s %255s %255s %31s", id, url, src_address, ident, method) < 5) {
         // mangled/invalid input: ignore
-        sprintf(output, "\n");
+        fprintf(output, "\n");
         return;
     }
     
     /// check allow rules first
     if (allow_match(url)) {
-        // matched allow rule: return
-        goto out;
+        // matched allow rule: just return
+    }
+    else {
+        // check block rules
+        const char* redirect = block_match(url);
+        if (redirect != NULL) {
+            // matched block URL: format redirect reply
+            fprintf(output, "%s %s %s %s %s\n", id, redirect, src_address, ident, method);
+            return;
+        }
     }
 
-    // check block rules
-    const char* redirect = block_match(url);
-    if (redirect != NULL) {
-        // matched block URL: format redirect reply
-        sprintf(output, "%s %s %s %s %s\n", id, redirect, src_address, ident, method);
-        return;
-    }
-
-out:
-    sprintf(output, "%s\n", id);
+    fprintf(output, "%s\n", id);
     return;
 }
 

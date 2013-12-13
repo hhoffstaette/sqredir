@@ -69,14 +69,12 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    // input/output buffers
+    // input buffer
     char input[IOBUFSIZE] = {0};
-    char output[IOBUFSIZE] = {0};
 
     // loop until EOF from stdin
     while(fgets(input, IOBUFSIZE, stdin) != NULL) {
-        match_request(input, output);
-        fprintf(stdout, "%s", output);
+        match_request(input, stdout);
         fflush(stdout);
     }
 
