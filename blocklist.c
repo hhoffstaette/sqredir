@@ -11,7 +11,6 @@
 // List element for keeping a whitelist URL pattern
 struct allow_node {
     regex_t url;
-    int line;
     struct allow_node* next;
 };
 
@@ -19,7 +18,6 @@ struct allow_node {
 struct block_node {
     regex_t url;
     char redir[256];
-    int line;
     struct block_node* next;
 };
 
@@ -58,7 +56,7 @@ const char* block_match(const char* url) {
 }
 
 // append URL pattern to allow list
-static bool add_allow_url(const char* pattern, int num)
+static bool add_allow_url(const char* pattern)
 {
     // TODO: the code path for creating the first and any successor list nodes
     // is unnecessarily duplicated and should be merged.
@@ -68,7 +66,6 @@ static bool add_allow_url(const char* pattern, int num)
                 fprintf(stderr, "regcomp failed for %s\n", pattern);
                 return false;
             }
-            allowlist->line = num;
             allowlist->next = NULL;
         } else {
             fprintf(stderr, "Unable to allocate memory: %s\n", strerror(errno));
@@ -85,7 +82,6 @@ static bool add_allow_url(const char* pattern, int num)
                 fprintf(stderr, "regcomp failed for %s\n", pattern);
                 return false;
             }
-            allow->line = num;
             allow->next = NULL;
         } else {
             fprintf(stderr, "Unable to allocate memory: %s\n", strerror(errno));
@@ -97,7 +93,7 @@ static bool add_allow_url(const char* pattern, int num)
 }
 
 // append URL pattern and redirect URL to block list 
-static bool add_block_url(const char* pattern, const char* redirect, int num)
+static bool add_block_url(const char* pattern, const char* redirect)
 {
     // TODO: the code path for creating the first and successor list nodes
     // is unnecessarily duplicated and should be merged.
@@ -108,7 +104,6 @@ static bool add_block_url(const char* pattern, const char* redirect, int num)
                 return false;
             }
             strcpy(blocklist->redir, redirect);
-            blocklist->line = num;
             blocklist->next = NULL;
         } else {
             fprintf(stderr, "Unable to allocate memory: %s\n", strerror(errno));
@@ -126,7 +121,6 @@ static bool add_block_url(const char* pattern, const char* redirect, int num)
                 return false;
             }
             strcpy(block->redir, redirect);
-            block->line = num;
             block->next = NULL;
         } else {
             fprintf(stderr, "Unable to allocate memory: %s\n", strerror(errno));
@@ -173,7 +167,7 @@ bool read_config(const char* filename)
             }
 
             // call add_allowurl()
-            if (!add_allow_url(pattern, i)) {
+            if (!add_allow_url(pattern)) {
                 return false;
             }
             continue;
@@ -186,7 +180,7 @@ bool read_config(const char* filename)
         } 
 
         // call add_blockurl()
-        if (!add_block_url(pattern, redirect, i)) {
+        if (!add_block_url(pattern, redirect)) {
             return false;
         }
     }
