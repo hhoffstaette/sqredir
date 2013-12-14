@@ -19,14 +19,15 @@ if (UNIX)
 	)
 endif ()
 
+
 # obey CFLAGS
 if (CMAKE_C_FLAGS)
 	# enforce C99 and use supplied CFLAGS
-	set (CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS}")
+	set (CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS} -D_XOPEN_SOURCE")
 	message ("-- Using CFLAGS: ${CMAKE_C_FLAGS}")
 else ()
 	# generic defaults
-	set (CMAKE_C_FLAGS "-pipe -std=c99 -Wall -O2")
+	set (CMAKE_C_FLAGS "-pipe -std=c99 -Wall -O2 -D_XOPEN_SOURCE")
 endif ()
 
 # don't let clang complain about unsupported GCC flags
