@@ -1,13 +1,11 @@
 
-#include <stdbool.h>
-#include <stdio.h>
+// Prototypes
+#include "blocklist.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <regex.h>
-
-// Modules
-#include "blocklist.h"
 
 // List element for keeping a whitelist URL pattern
 struct allow_node {

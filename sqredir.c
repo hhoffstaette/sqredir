@@ -31,8 +31,8 @@ static void usage() {
 int main(int argc, char **argv)
 {
     // path of config file
-    char config_file[1024] = {0};
-    strncpy(config_file, default_config_file, 1023);
+    char config_file[FILENAME_MAX] = {0};
+    strcpy(config_file, default_config_file);
 
     // parse command line arguments
     int arg = 0;
