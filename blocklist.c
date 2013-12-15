@@ -210,19 +210,17 @@ void match_and_reply(const char* input, FILE* output)
     }
     
     /// check allow rules first
-    if (allow_match(url)) {
-        // matched allow rule: just return
-    }
-    else {
-        // check block rules
+    if (!allow_match(url)) {
+        // did not match an allow rule: check block rules
         const char* redirect = block_match(url);
         if (redirect != NULL) {
-            // matched block URL: format redirect reply
+            // matched block URL: write redirect reply
             fprintf(output, "%s %s %s %s %s\n", id, redirect, src_address, ident, method);
             return;
         }
     }
 
+    // allow match or no blocklist match: only write the request id
     fprintf(output, "%s\n", id);
     return;
 }
