@@ -60,13 +60,6 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    // make standard output fully buffered
-    char stdoutbuf[IOBUFSIZE] = {0};
-    if (setvbuf(stdout, stdoutbuf, _IOFBF, IOBUFSIZE) != 0) {
-        fprintf(stderr, "Unable to configure stdout buffer: %s\n", strerror(errno));
-        exit(EXIT_FAILURE);
-    }
-
     // input buffer
     char input[IOBUFSIZE] = {0};
 
