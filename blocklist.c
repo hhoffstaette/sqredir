@@ -1,4 +1,5 @@
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,36 +25,6 @@ struct block_node {
 // Lists of regexps to block/allow
 static struct allow_node* allowlist;
 static struct block_node* blocklist;
-
-// match URL against allowlist
-bool allow_match(const char* url) {
-    struct allow_node* allow = allowlist;
-    while (allow != NULL) {
-        if (regexec(&allow->url, url, (size_t) 0, NULL, 0) == 0) {
-            // matched allow rule
-            return true;
-        }
-        allow = allow->next;
-    }
-
-    // no match
-    return false;
-}
-
-// match URL against blocklist
-const char* block_match(const char* url) {
-    struct block_node* block = blocklist;
-    while (block != NULL) {
-        if (!regexec(&block->url, url, (size_t) 0, NULL, 0)) {
-            // matched block URL: return replacement
-            return block->redir;
-        }
-        block = block->next;
-    }
-
-    // no match
-    return NULL;
-}
 
 // append URL pattern to allow list
 static bool add_allow_url(const char* pattern)
@@ -131,6 +102,36 @@ static bool add_block_url(const char* pattern, const char* redirect)
     return true;
 }
 
+// match URL against allowlist
+static bool allow_match(const char* url) {
+    struct allow_node* allow = allowlist;
+    while (allow != NULL) {
+        if (regexec(&allow->url, url, (size_t) 0, NULL, 0) == 0) {
+            // matched allow rule
+            return true;
+        }
+        allow = allow->next;
+    }
+
+    // no match
+    return false;
+}
+
+// match URL against blocklist
+static const char* block_match(const char* url) {
+    struct block_node* block = blocklist;
+    while (block != NULL) {
+        if (!regexec(&block->url, url, (size_t) 0, NULL, 0)) {
+            // matched block URL: return replacement
+            return block->redir;
+        }
+        block = block->next;
+    }
+
+    // no match
+    return NULL;
+}
+
 // reads content of config file; recognizes lines starting with '#' as comments
 // filename: name of config file including path
 // returns: true/false for success/failure
@@ -187,5 +188,42 @@ bool read_config(const char* filename)
 
     fclose(urlfile);
     return true;
+}
+
+// tests the HTTP request and returns the redirect information if necessary
+// input: the original request as passed by Squid        
+// output: response output stream
+void match_and_reply(const char* input, FILE* output)
+{
+    // request line elements
+    char id[8];
+    char url[1024];
+    char src_address[256];
+    char ident[256];
+    char method[32];
+
+    // scan request, ignore if invalid
+    if (sscanf(input, "%7s %1023s %255s %255s %31s", id, url, src_address, ident, method) < 5) {
+        // mangled/invalid input: ignore
+        fprintf(output, "\n");
+        return;
+    }
+    
+    /// check allow rules first
+    if (allow_match(url)) {
+        // matched allow rule: just return
+    }
+    else {
+        // check block rules
+        const char* redirect = block_match(url);
+        if (redirect != NULL) {
+            // matched block URL: format redirect reply
+            fprintf(output, "%s %s %s %s %s\n", id, redirect, src_address, ident, method);
+            return;
+        }
+    }
+
+    fprintf(output, "%s\n", id);
+    return;
 }
 

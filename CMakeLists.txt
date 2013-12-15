@@ -35,7 +35,7 @@ if (CMAKE_C_COMPILER MATCHES "clang")
 	set (CMAKE_C_FLAGS "-Qunused-arguments ${CMAKE_C_FLAGS}")
 endif ()
 
-set (src blocklist.c match.c sqredir.c)
+set (src blocklist.c sqredir.c)
 add_executable (sqredir ${src})
 
 # configure via -DCMAKE_INSTALL_PREFIX=/usr

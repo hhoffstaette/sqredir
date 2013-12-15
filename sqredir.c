@@ -8,16 +8,15 @@
 
 // Modules
 #include "blocklist.h"
-#include "match.h"
 
 // I/O buffer size, must be > length of n * id+url+src_address+ident+method
-#define IOBUFSIZE 32768
+#define IOBUFSIZE 65536
 
 // default config file
 static const char default_config_file[] = "/etc/sqredir.conf";
 
 // Help
-void usage() {
+static void usage() {
     fprintf(stderr,
         "\n"
         "Usage: sqredir [options]\n"
@@ -73,7 +72,7 @@ int main(int argc, char **argv)
 
     // loop until EOF from stdin
     while(fgets(input, IOBUFSIZE, stdin) != NULL) {
-        match_request(input, stdout);
+        match_and_reply(input, stdout);
         fflush(stdout);
     }
 
