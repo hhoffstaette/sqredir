@@ -1,38 +1,38 @@
 
-#include <errno.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cerrno>
+#include <cstdlib>
+#include <iostream>
+
+// getopt
 #include <unistd.h>
 
-// Modules
+// Prototypes
 #include "blocklist.h"
 
-// I/O buffer size, must be > length of n * id+url+src_address+ident+method
-#define IOBUFSIZE 65536
+using namespace std;
+
+// must be > length of id+url+src_address+ident+method
+#define REQ_LINE_MAXLENGTH 8192
 
 // default config file
-static const char default_config_file[] = "/etc/sqredir.conf";
+static const string default_config_file = "/etc/sqredir.conf";
 
 // Help
 static void usage() {
-    fprintf(stderr,
-        "\n"
-        "Usage: sqredir [options]\n"
-        "\n"
-        "Options:\n"
-        "   -f <file>   Specify path to blocklist configuration\n"
-        "   -h          Print this help and exit.\n"
-        "\n");
+    cerr << endl
+        << "Usage: sqredir [options]" << endl
+        << endl
+        << "Options:" << endl
+        << "   -f <file>   Specify path to blocklist configuration" << endl
+        << "   -h          Print this help and exit." << endl
+        << endl;
 }
 
 // Magic happens here
 int main(int argc, char **argv)
 {
     // path of config file
-    char config_file[FILENAME_MAX] = {0};
-    strcpy(config_file, default_config_file);
+    string config_file = default_config_file;
 
     // parse command line arguments
     int arg = 0;
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
         switch (arg)
         {
             case 'f': {
-                strncpy(config_file, optarg, 1023);
+                config_file = optarg;
                 break;
             }
             case 'h': {
@@ -60,11 +60,11 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    // input buffer
-    char input[IOBUFSIZE] = {0};
+    // input buffer for a single request
+    char input[REQ_LINE_MAXLENGTH] = {0};
 
     // loop until EOF from stdin
-    while(fgets(input, IOBUFSIZE, stdin) != NULL) {
+    while(fgets(input, REQ_LINE_MAXLENGTH-1, stdin) != NULL) {
         match_and_reply(input, stdout);
         fflush(stdout);
     }

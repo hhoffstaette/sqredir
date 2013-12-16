@@ -19,23 +19,22 @@ if (UNIX)
 	)
 endif ()
 
-
-# obey CFLAGS
-if (CMAKE_C_FLAGS)
-	# enforce C99 and use supplied CFLAGS
-	set (CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS} -D_XOPEN_SOURCE")
-	message ("-- Using CFLAGS: ${CMAKE_C_FLAGS}")
+# obey CXXFLAGS
+if (CMAKE_CXX_FLAGS)
+	# use supplied CXXFLAGS, but also enforce POSIX
+	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_XOPEN_SOURCE")
+	message ("-- Using CXXFLAGS: ${CMAKE_CXX_FLAGS}")
 else ()
 	# generic defaults
-	set (CMAKE_C_FLAGS "-pipe -std=c99 -Wall -O2 -D_XOPEN_SOURCE")
+	set (CMAKE_CXX_FLAGS "-pipe -Wall -march=native -O2 -D_XOPEN_SOURCE")
 endif ()
 
 # don't let clang complain about unsupported GCC flags
-if (CMAKE_C_COMPILER MATCHES "clang")
-	set (CMAKE_C_FLAGS "-Qunused-arguments ${CMAKE_C_FLAGS}")
+if (CMAKE_CXX_COMPILER MATCHES "clang")
+	set (CMAKE_CXX_FLAGS "-Qunused-arguments ${CMAKE_CXX_FLAGS}")
 endif ()
 
-set (src blocklist.c sqredir.c)
+set (src blocklist.cpp sqredir.cpp)
 add_executable (sqredir ${src})
 
 # configure via -DCMAKE_INSTALL_PREFIX=/usr
