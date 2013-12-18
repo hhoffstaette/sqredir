@@ -19,15 +19,13 @@ if (UNIX)
 	)
 endif ()
 
-# obey CXXFLAGS
-if (CMAKE_CXX_FLAGS)
-	# use supplied CXXFLAGS, but also enforce POSIX
-	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_XOPEN_SOURCE")
-	message ("-- Using CXXFLAGS: ${CMAKE_CXX_FLAGS}")
-else ()
+# obey CXXFLAGS or use defaults
+if (NOT CMAKE_CXX_FLAGS)
 	# generic defaults
-	set (CMAKE_CXX_FLAGS "-pipe -Wall -march=native -O2 -D_XOPEN_SOURCE")
+	set (CMAKE_CXX_FLAGS "-pipe -march=native -O2 -Wall")
 endif ()
+
+message ("-- Using CXXFLAGS: ${CMAKE_CXX_FLAGS}")
 
 # don't let clang complain about unsupported GCC flags
 if (CMAKE_CXX_COMPILER MATCHES "clang")
