@@ -32,11 +32,18 @@ endif ()
 
 message ("-- Using CXXFLAGS: ${CMAKE_CXX_FLAGS}")
 
-set (src blocklist.cpp sqredir.cpp)
-add_executable (sqredir ${src})
+set (SRC blocklist.cpp sqredir.cpp)
+set (EXEC sqredir)
+
+add_executable (${EXEC} ${SRC})
+
+find_library(PCREPOSIX_LIBRARY pcreposix)
+find_library(PCRE_LIBRARY pcre)
+
+target_link_libraries(${EXEC} ${PCREPOSIX_LIBRARY} ${PCRE_LIBRARY})
 
 # configure via -DCMAKE_INSTALL_PREFIX=/usr
-install (TARGETS sqredir DESTINATION bin)
+install (TARGETS ${EXEC} DESTINATION bin)
 
 # TODO: we should really observe CMAKE_INSTALL_PREFIX,
 # but the config file location is currently hardcoded

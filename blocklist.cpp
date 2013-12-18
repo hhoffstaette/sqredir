@@ -7,7 +7,7 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
-#include <regex.h>
+#include <pcreposix.h>
 
 using namespace std;
 
