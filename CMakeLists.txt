@@ -25,12 +25,12 @@ if (NOT CMAKE_CXX_FLAGS)
 	set (CMAKE_CXX_FLAGS "-pipe -march=native -O2 -Wall")
 endif ()
 
-message ("-- Using CXXFLAGS: ${CMAKE_CXX_FLAGS}")
-
 # don't let clang complain about unsupported GCC flags
 if (CMAKE_CXX_COMPILER MATCHES "clang")
-	set (CMAKE_CXX_FLAGS "-Qunused-arguments ${CMAKE_CXX_FLAGS}")
+	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments")
 endif ()
+
+message ("-- Using CXXFLAGS: ${CMAKE_CXX_FLAGS}")
 
 set (src blocklist.cpp sqredir.cpp)
 add_executable (sqredir ${src})
