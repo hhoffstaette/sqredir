@@ -2,8 +2,6 @@
 #include <cerrno>
 #include <cstdlib>
 #include <iostream>
-
-// getopt
 #include <unistd.h>
 
 // Prototypes
@@ -12,7 +10,7 @@
 using namespace std;
 
 // must be > length of id+url+src_address+ident+method
-#define REQ_LINE_MAXLENGTH 8192
+#define REQ_LINE_MAXLENGTH 4096
 
 // default config file
 static const string default_config_file = "/etc/sqredir.conf";
