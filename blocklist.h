@@ -1,4 +1,7 @@
 
+#ifndef SQREDIR_BLOCKLIST_H
+#define SQREDIR_BLOCKLIST_H
+
 #include <cstdio>
 #include <string>
 
@@ -13,3 +16,4 @@ bool read_config(string filename);
 // output: response output stream (usually stdout)
 void match_and_reply(const char* input, FILE* output);
 
+#endif

@@ -1,13 +1,13 @@
 
+// Prototypes
+#include "blocklist.h"
+
 #include <cerrno>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <vector>
 #include <regex.h>
-
-// Prototypes
-#include "blocklist.h"
 
 using namespace std;
 
