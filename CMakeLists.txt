@@ -38,9 +38,8 @@ set (EXEC sqredir)
 add_executable (${EXEC} ${SRC})
 
 find_library(PCREPOSIX_LIBRARY pcreposix)
-find_library(PCRE_LIBRARY pcre)
 
-target_link_libraries(${EXEC} ${PCREPOSIX_LIBRARY} ${PCRE_LIBRARY})
+target_link_libraries(${EXEC} ${PCREPOSIX_LIBRARY})
 
 # configure via -DCMAKE_INSTALL_PREFIX=/usr
 install (TARGETS ${EXEC} DESTINATION bin)
