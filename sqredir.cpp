@@ -6,6 +6,7 @@
 
 // Prototypes
 #include "blocklist.h"
+#include "version.h"
 
 using namespace std;
 
@@ -17,7 +18,8 @@ static const string default_config_file = "/etc/sqredir.conf";
 
 // Help
 static void usage() {
-    cerr << endl
+    cerr << "sqredir " << SQREDIR_VERSION << endl
+        << endl
         << "Usage: sqredir [options]" << endl
         << endl
         << "Options:" << endl

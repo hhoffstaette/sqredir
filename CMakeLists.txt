@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8)
 
 project(sqredir)
 
+set (SQREDIR_VERSION "0.5")
+
 # custom distclean target
 if (UNIX)
 	add_custom_target (distclean @echo cleaning for source distribution)
@@ -31,6 +33,9 @@ if (CMAKE_CXX_COMPILER MATCHES "clang")
 endif ()
 
 message ("-- Using CXXFLAGS: ${CMAKE_CXX_FLAGS}")
+message ("-- Version: ${SQREDIR_VERSION}")
+
+configure_file ("${PROJECT_SOURCE_DIR}/version.h.in" "${PROJECT_BINARY_DIR}/version.h")
 
 set (SRC blocklist.cpp sqredir.cpp)
 set (EXEC sqredir)
