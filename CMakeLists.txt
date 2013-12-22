@@ -9,7 +9,7 @@ set (SQREDIR_VERSION "0.5")
 if (UNIX)
 	add_custom_target (distclean @echo cleaning for source distribution)
 	set (DISTCLEAN_FILES CMakeCache.txt cmake_install.cmake install_manifest.txt
-		Makefile core gmon.out *~)
+		Makefile core gmon.out version.h *~)
 	set (DISTCLEAN_DIRS CMakeFiles)
 
 	add_custom_command (
