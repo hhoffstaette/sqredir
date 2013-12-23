@@ -31,7 +31,7 @@ Here's how to get started:
 The cmake configuration step is aware of all the usual cmake flags
 and will also consider any custom CXX (hello clang!) or CXXFLAGS.
 
-The lkast step should give you a single binary called 'sqredir'.
+The last step should give you a single binary called 'sqredir'.
 Copy it wherever you want it to go, and copy the template sqredir.conf
 to /etc (built-in default location) or anywhere else you want.
 
