@@ -5,26 +5,39 @@ Sqredir is a correct, simple and fast Squid URL rewrite helper based on
 [asqredir](http://asqredir.sourceforge.net/), with bugs removed and
 added request batching (what Squid calls 'concurrency').
 
-My primary motivation for this project was adding the request batching;
-unfortunately the code was so convoluted that I essentially ended up
-refactoring the entire codebase.
+My primary motivation for this project was to add the request batching
+to increase throughput and to reduce per-request latency; unfortunately
+the original code was quite convoluted and unmaintained, so I essentially
+ended up rewriting the entire codebase.
 
-More documentation will come in time, but here's a quick HOWTO:
+Main differences are:
 
-- clone this repo or get a release (>= 0.2)
+- removal of debugging/logging & other duplicated code
+- removed unnecessary stdin/stdout buffer configuration
+- increased I/O buffers to reduce crashes with long URLs
+- used bits of standard C++ for correctness/safety and performance
+- use of PCRE to match regexps instead of glibc
+  (a noticeable performance improvement)
+
+Here's how to get started:
+
+- clone this repo or get a release (>= 1.0)
 - make sure you have cmake (http://www.cmake.org/)
+- make sure you have PCRE (http://www.pcre.org/)
+  (both runtime and dev packages with POSIX compatibility)
 - cmake CMakeLists.txt
 - make
 
 The cmake configuration step is aware of all the usual cmake flags
-and will also be nice to any CC (hello clang!) or custom CFLAGS
-you want to specify.
+and will also consider any custom CXX (hello clang!) or CXXFLAGS.
 
-This should give you a binary. Copy it whereever you want it to go,
-and copy the template sqredir.conf to /etc (built-in default) or
-whereever you want to have it. Alternatively "make install" should
-do something reasonably sane as well, even though it's only an initial
-cut for now.
+The lkast step should give you a single binary called 'sqredir'.
+Copy it wherever you want it to go, and copy the template sqredir.conf
+to /etc (built-in default location) or anywhere else you want.
+
+Alternatively "make install" should do something reasonably sane
+as well; you can also export CMAKE_INSTALL_PREFIX for a custom binary
+target path prefix.
 
 Add the following lines to your squid.conf:
 

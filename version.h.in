@@ -1,4 +1,4 @@
 
 // Version injected by cmake
-#define SQREDIR_VERSION @SQREDIR_VERSION@
+#define SQREDIR_VERSION "@SQREDIR_VERSION@"
 

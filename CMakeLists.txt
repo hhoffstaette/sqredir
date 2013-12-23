@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(sqredir)
 
-set (SQREDIR_VERSION "0.6")
+set (SQREDIR_VERSION "1.0")
 
 # custom distclean target
 if (UNIX)
