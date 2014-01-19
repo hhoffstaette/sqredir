@@ -160,14 +160,10 @@ void match_and_reply(const char* input, FILE* output)
     // request line elements
     char id[8];
     char url[1024];
-    char src_address[256];
-    char ident[256];
-    char method[32];
 
-    // scan request, ignore if invalid
-    if (sscanf(input, "%7s %1023s %255s %255s %31s", id, url, src_address, ident, method) < 5) {
+    // scan request, ignore if invalid (should never happen)
+    if (sscanf(input, "%7s %1023s", id, url) < 2) {
         // mangled/invalid input: ignore
-        fprintf(output, "\n");
         return;
     }
 
@@ -177,13 +173,12 @@ void match_and_reply(const char* input, FILE* output)
         const char* redirect = match_block(url);
         if (redirect != NULL) {
             // matched block URL: write redirect reply
-            fprintf(output, "%s %s %s %s %s\n", id, redirect, src_address, ident, method);
+            fprintf(output, "%s OK status=302 url=%s\n", id, redirect);
             return;
         }
     }
 
     // allow match or no blocklist match: only write the request id
-    fprintf(output, "%s\n", id);
+    fprintf(output, "%s OK\n", id);
     return;
 }
-

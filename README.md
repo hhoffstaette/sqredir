@@ -12,6 +12,7 @@ ended up rewriting the entire codebase.
 
 Main differences are:
 
+- update to [new-style helper protocol](http://www.squid-cache.org/Doc/config/url_rewrite_program/)
 - removal of debugging/logging & other duplicated code
 - removed unnecessary stdin/stdout buffer configuration
 - increased I/O buffers to reduce crashes with long URLs
