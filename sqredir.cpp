@@ -16,17 +16,24 @@ using namespace std;
 // default config file
 static const string default_config_file = "/etc/sqredir.conf";
 
+// Version
+static void version() {
+    cerr << "sqredir " << SQREDIR_VERSION << endl;
+}
+
 // Help
 static void usage() {
-    cerr << "sqredir " << SQREDIR_VERSION << endl
-        << endl
+    version();
+    cerr << endl
         << "Usage: sqredir [options]" << endl
         << endl
         << "Options:" << endl
         << "   -f <file>   Specify path to blocklist configuration" << endl
         << "   -h          Print this help and exit." << endl
+        << "   -v          Print version and exit." << endl
         << endl;
 }
+
 
 // Magic happens here
 int main(int argc, char **argv)
@@ -36,7 +43,7 @@ int main(int argc, char **argv)
 
     // parse command line arguments
     int arg = 0;
-    while ((arg = getopt(argc, argv, "f:h")) != -1) {
+    while ((arg = getopt(argc, argv, "f:hv")) != -1) {
         switch (arg)
         {
             case 'f': {
@@ -45,6 +52,11 @@ int main(int argc, char **argv)
             }
             case 'h': {
                 usage();
+                exit(EXIT_SUCCESS);
+                break;
+            }
+            case 'v': {
+                version();
                 exit(EXIT_SUCCESS);
                 break;
             }
