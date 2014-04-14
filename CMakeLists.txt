@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(sqredir)
 
-set (SQREDIR_VERSION "1.2")
+set (SQREDIR_VERSION "1.3")
 
 # custom distclean target
 if (UNIX)
@@ -24,7 +24,7 @@ endif ()
 # obey CXXFLAGS or use defaults
 if (NOT CMAKE_CXX_FLAGS)
 	# generic defaults
-	set (CMAKE_CXX_FLAGS "-pipe -march=native -O2 -Wall")
+	set (CMAKE_CXX_FLAGS "-pipe -std=c++11 -march=native -O2 -Wall")
 endif ()
 
 # don't let clang complain about unsupported GCC flags
