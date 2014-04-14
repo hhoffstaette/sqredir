@@ -5,11 +5,9 @@
 #include <cstdio>
 #include <string>
 
-using namespace std;
-
 // reads the given configuration file
 // returns: true/false for success/failure
-bool read_config(string filename);
+bool read_config(std::string filename);
 
 // tries to match the Squid request & writes the response to the output stream
 // input: a request line as passed by Squid
