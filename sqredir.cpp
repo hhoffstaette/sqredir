@@ -11,10 +11,10 @@
 using namespace std;
 
 // must be > length of id+url+src_address+ident+method
-#define REQ_LINE_MAXLENGTH 4096
+static const int REQ_LINE_MAXLENGTH=4096;
 
 // default config file
-static const string default_config_file = "/etc/sqredir.conf";
+static const string DEFAULT_CONFIG_FILE = "/etc/sqredir.conf";
 
 // Version
 static void version() {
@@ -39,7 +39,7 @@ static void usage() {
 int main(int argc, char **argv)
 {
     // path of config file
-    string config_file = default_config_file;
+    string config_file = DEFAULT_CONFIG_FILE;
 
     // parse command line arguments
     int arg = 0;
