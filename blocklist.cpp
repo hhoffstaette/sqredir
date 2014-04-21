@@ -66,8 +66,8 @@ static bool add_block_url(const char* pattern, const char* redirect)
 
 // match URL against allowlist
 static bool match_allow(const char* url) {
-    for (int i = 0, num = allow_list.size(); i < num; i++) {
-        if (regexec(&(allow_list[i]), url, 0, NULL, 0) == 0) {
+    for (auto allow: allow_list) {
+        if (regexec(&allow, url, 0, NULL, 0) == 0) {
             // matched allow rule
             return true;
         }
@@ -79,10 +79,10 @@ static bool match_allow(const char* url) {
 
 // match URL against blocklist
 static const char* match_block(const char* url) {
-    for (int i = 0, num = block_list.size(); i < num; i++) {
-        if (regexec(&(block_list[i].url), url, 0, NULL, 0) == 0) {
+    for (auto node: block_list) {
+        if (regexec(&(node.url), url, 0, NULL, 0) == 0) {
             // matched block URL: return replacement
-            return block_list[i].redirect.c_str();
+            return node.redirect.c_str();
         }
     }
 
@@ -182,3 +182,4 @@ void match_and_reply(const char* input, FILE* output)
     fprintf(output, "%s OK\n", id);
     return;
 }
+
