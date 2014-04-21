@@ -25,6 +25,9 @@ endif ()
 if (NOT CMAKE_CXX_FLAGS)
 	# generic defaults
 	set (CMAKE_CXX_FLAGS "-pipe -std=c++11 -march=native -O2 -Wall")
+else ()
+	# add C++11 support
+	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif ()
 
 # don't let clang complain about unsupported GCC flags
