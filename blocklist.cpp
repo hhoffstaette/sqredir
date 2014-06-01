@@ -66,7 +66,7 @@ static bool add_block_url(const char* pattern, const char* redirect)
 
 // match URL against allowlist
 static bool match_allow(const char* url) {
-    for (auto allow: allow_list) {
+    for (auto& allow: allow_list) {
         if (regexec(&allow, url, 0, NULL, 0) == 0) {
             // matched allow rule
             return true;
@@ -79,10 +79,10 @@ static bool match_allow(const char* url) {
 
 // match URL against blocklist
 static const char* match_block(const char* url) {
-    for (auto node: block_list) {
-        if (regexec(&(node.url), url, 0, NULL, 0) == 0) {
+    for (auto& block: block_list) {
+        if (regexec(&(block.url), url, 0, NULL, 0) == 0) {
             // matched block URL: return replacement
-            return node.redirect.c_str();
+            return block.redirect.c_str();
         }
     }
 
